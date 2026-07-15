@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDashboardData } from "../api";
+import { getDashboardData, API_URL } from "../api";
 import axios from "axios";
 export default function GeminiCore() {
   const [dashboard, setDashboard] = useState(null);
@@ -11,7 +11,7 @@ const runAIAnalysis = async () => {
     setLoading(true);
 
     const response = await axios.post(
-      "http://localhost:8080/api/reason",
+      `${API_URL}/api/reason`,
       {
         focus: "Analyze current stadium operations and suggest actions"
       }

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+export const API_URL = import.meta.env.VITE_API_URL || "https://fifa-pulse-ai.onrender.com";
 
 export async function getDashboardData() {
   const response = await fetch(`${API_URL}/api/dashboard`);
