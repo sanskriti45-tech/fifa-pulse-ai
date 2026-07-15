@@ -1,4 +1,21 @@
+import { useEffect, useState } from "react";
+import { getDashboardData } from "../api";
 export default function CrowdAnalytics() {
+  const [crowd, setCrowd] = useState(null);
+
+useEffect(() => {
+  const fetchData = () => {
+    getDashboardData().then((data) => {
+      setCrowd(data.stadiums[0].metrics.crowdDensity);
+    });
+  };
+
+  fetchData();
+
+  const interval = setInterval(fetchData, 4000);
+
+  return () => clearInterval(interval);
+}, []);
   return (
     <section className="px-margin-desktop reveal" id="crowd-analytics">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
@@ -16,11 +33,20 @@ export default function CrowdAnalytics() {
           </div>
           <div className="mt-12 space-y-6">
             <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-              <div className="h-full bg-neon-green w-[85%]"></div>
+              <div
+  className="h-full bg-neon-green"
+  style={{
+    width: `${crowd ? crowd.overallPercent : 0}%`
+  }}
+></div>
             </div>
             <div className="flex justify-between font-data-label text-sm">
-              <span className="opacity-60">GATE 7 DENSITY: HIGH</span>
-              <span className="text-neon-green">REROUTING ACTIVE</span>
+              <span className="opacity-60">
+  CROWD DENSITY: {crowd ? `${crowd.overallPercent}%` : "Loading..."}
+</span>
+              <span className="text-neon-green">
+  HOT ZONES: {crowd ? crowd.hotZones : 0}
+</span>
             </div>
           </div>
         </div>

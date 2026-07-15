@@ -1,4 +1,20 @@
+import { useEffect, useState } from "react";
+import { getDashboardData } from "../api";
 export default function Operations() {
+  const [dashboard, setDashboard] = useState(null);
+useEffect(() => {
+  const fetchData = () => {
+    getDashboardData().then((data) => {
+      setDashboard(data);
+    });
+  };
+
+  fetchData();
+
+  const interval = setInterval(fetchData, 4000);
+
+  return () => clearInterval(interval);
+}, []);
   return (
     <section className="px-margin-desktop max-w-container-max mx-auto reveal" id="operations">
       <div className="grid grid-cols-12 gap-gutter">
@@ -28,7 +44,9 @@ export default function Operations() {
                   <span className="text-data-label font-data-label opacity-60">
                     CONFIDENCE SCORE
                   </span>
-                  <p className="text-data-value font-data-value text-neon-green">98.4%</p>
+                 <p className="text-data-value font-data-value text-neon-green">
+  {dashboard ? `${dashboard.aggregate.avgCrowdDensityPercent}%` : "Loading..."}
+</p>
                 </div>
                 <span className="material-symbols-outlined text-neon-green">query_stats</span>
               </div>
